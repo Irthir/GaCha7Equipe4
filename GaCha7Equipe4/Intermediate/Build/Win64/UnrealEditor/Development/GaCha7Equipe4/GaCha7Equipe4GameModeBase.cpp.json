@@ -1,0 +1,19 @@
+{
+    "Version": "1.1",
+    "Data": {
+        "Source": "d:\\data\\gacha\\gacha7equipe4\\source\\gacha7equipe4\\gacha7equipe4gamemodebase.cpp",
+        "ProvidedModule": "",
+        "PCH": "d:\\data\\gacha\\gacha7equipe4\\intermediate\\build\\win64\\gacha7equipe4editor\\development\\engine\\sharedpch.engine.shadowerrors.h.pch",
+        "Includes": [
+            "d:\\data\\gacha\\gacha7equipe4\\intermediate\\build\\win64\\unrealeditor\\development\\gacha7equipe4\\definitions.gacha7equipe4.h",
+            "d:\\data\\gacha\\gacha7equipe4\\source\\gacha7equipe4\\gacha7equipe4gamemodebase.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\engine\\classes\\gameframework\\gamemodebase.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\engine\\classes\\engine\\serverstatreplicator.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\serverstatreplicator.generated.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\gamemodebase.generated.h",
+            "d:\\data\\gacha\\gacha7equipe4\\intermediate\\build\\win64\\unrealeditor\\inc\\gacha7equipe4\\gacha7equipe4gamemodebase.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

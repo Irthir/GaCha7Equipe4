@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "GaCha7Equipe4",
+			"Path": "D:\\Data\\GaCha\\GaCha7Equipe4\\Source\\GaCha7Equipe4.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "GaCha7Equipe4Editor",
+			"Path": "D:\\Data\\GaCha\\GaCha7Equipe4\\Source\\GaCha7Equipe4Editor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}
