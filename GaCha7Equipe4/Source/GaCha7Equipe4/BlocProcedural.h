@@ -13,6 +13,18 @@ struct FBlocStruct
 	TArray<uint8> Ligne;
 };
 
+USTRUCT(BlueprintType)
+struct FObstacleStruct
+{
+	GENERATED_BODY()
+	UPROPERTY(BlueprintReadWrite)
+	uint8 nDifficulty;
+	UPROPERTY(BlueprintReadWrite)
+	uint8 nSize;
+	UPROPERTY(BlueprintReadWrite)
+	TSubclassOf<AActor> Obstacle;
+};
+
 UCLASS()
 class GACHA7EQUIPE4_API ABlocProcedural : public AActor
 {
@@ -32,10 +44,18 @@ protected:
 	void InitMap();
 	
 	bool CheckDisponibility(uint8 x, uint8 y, uint8 size);
-
+	
+	UFUNCTION(BlueprintCallable)
 	void PopulateMap(uint8 nDifficulty);
 
-public:	
+	UFUNCTION(BlueprintCallable)
+	void AddObstacle(uint8 difficulty, uint8 size, TSubclassOf<AActor> Obstacle);
+
+public:
+	UPROPERTY(BlueprintReadWrite)
+	TArray<FObstacleStruct> TObstacleStructs;
+
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
