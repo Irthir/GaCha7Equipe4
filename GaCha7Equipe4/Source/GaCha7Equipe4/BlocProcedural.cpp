@@ -92,9 +92,9 @@ void ABlocProcedural::PopulateMap(int32 nDifficulty, FString TypeObstacle)
 	UE_LOG(LogTemp, Warning, TEXT("Difficulte, %d"), nDifficulty);
 	
 	int nbIteration = 0;
-	while (nDifficulty>0 && nbIteration<1000)
+	while (nDifficulty>0 && nbIteration<10000)
 	{
-		FMath::RandInit(FDateTime::Now().GetTicks());
+		//FMath::RandInit(FDateTime::Now().GetTicks());
 		nbIteration++;
 		uint8 x = FMath::RandRange(0, nTailleBloc-1);
 		uint8 y = FMath::RandRange(0, nTailleBloc-1);
