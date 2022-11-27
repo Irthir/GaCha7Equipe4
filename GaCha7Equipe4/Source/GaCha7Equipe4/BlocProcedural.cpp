@@ -99,7 +99,15 @@ void ABlocProcedural::PopulateMap(uint8 nDifficulty, FString TypeObstacle)
 		
 		if (CheckDisponibility(x, y, obstacle.nSize))
 		{
-			int32 Index = TObstacleStructs.IndexOfByKey(obstacle);
+			int32 Index = 0;
+			for (int i = 0; i < TObstacleStructs.Num(); ++i)
+			{
+				if (TObstacleStructs[i].Obstacle == obstacle.Obstacle)
+				{
+					Index = i;
+					break;
+				}
+			}
 
 			InsertObstacle(x,y,Index,obstacle.nSize);
 			
