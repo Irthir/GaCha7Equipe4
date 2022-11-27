@@ -39,14 +39,19 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(BlueprintReadWrite)
+	int32 nTailleBloc = 10;
+	
+	UPROPERTY(BlueprintReadWrite)
 	TArray<FBlocStruct> tMap;
 
 	void InitMap();
 	
 	bool CheckDisponibility(uint8 x, uint8 y, uint8 size);
+
+	void InsertObstacle(uint8 nX, uint8 nY, int32 nIndexObstacle, uint8 nSize);
 	
 	UFUNCTION(BlueprintCallable)
-	void PopulateMap(uint8 nDifficulty);
+	void PopulateMap(uint8 nDifficulty, FString TypeObstacle);
 
 	UFUNCTION(BlueprintCallable)
 	void AddObstacle(uint8 difficulty, uint8 size, TSubclassOf<AActor> Obstacle);
@@ -54,7 +59,6 @@ protected:
 public:
 	UPROPERTY(BlueprintReadWrite)
 	TArray<FObstacleStruct> TObstacleStructs;
-
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

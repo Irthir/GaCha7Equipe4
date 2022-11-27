@@ -21,8 +21,8 @@ void ABlocProcedural::BeginPlay()
 void ABlocProcedural::InitMap()
 {
 	FBlocStruct bloc;
-	bloc.Ligne.Init(0,10);
-	tMap.Init(bloc,10);
+	bloc.Ligne.Init(0,nTailleBloc);
+	tMap.Init(bloc,nTailleBloc);
 }
 
 bool ABlocProcedural::CheckDisponibility(uint8 x, uint8 y, uint8 size)
@@ -59,30 +59,51 @@ bool ABlocProcedural::CheckDisponibility(uint8 x, uint8 y, uint8 size)
 	return bDisponible;
 }
 
-void ABlocProcedural::PopulateMap(uint8 nDifficulty)
+void ABlocProcedural::InsertObstacle(uint8 nX, uint8 nY, int32 nIndexObstacle, uint8 nSize)
+{
+	tMap[nX].Ligne[nY] = nIndexObstacle;
+	if (nSize != 1)
+	{
+		for (int i = 1; i < nSize; i++)
+		{
+			tMap[nX + i].Ligne[nY] = nIndexObstacle;
+			tMap[nX].Ligne[nY + i] = nIndexObstacle;
+			tMap[nX + i].Ligne[nY + i] = nIndexObstacle;
+		}
+	}
+}
+
+
+void ABlocProcedural::PopulateMap(uint8 nDifficulty, FString TypeObstacle)
 {
 	int nbIteration = 0;
 	while (nDifficulty>0 && nbIteration<100)
 	{
 		nbIteration++;
+		uint8 x = FMath::RandRange(0, nTailleBloc);
+		uint8 y = FMath::RandRange(0, nTailleBloc);
 
 		
-		uint8 x = FMath::RandRange(0, 9);
-		uint8 y = FMath::RandRange(0, 9);
-		uint8 size = FMath::RandRange(1, 3);
-
-		TObstacleStructs obstacle;
-
-		if (CheckDisponibility(x, y, size))
+		TArray<FObstacleStruct> tObstacle;
+		for (int i = 0; i < TObstacleStructs.Num(); ++i)
 		{
-			for (int i = 0; i < size; i++)
+			if (true) //Faire la gestion du type d'obstacle.
 			{
-				tMap[x + i].Ligne[y] = 1;
-				tMap[x].Ligne[y + i] = 1;
-				tMap[x + i].Ligne[y + i] = 1;
+				tObstacle.Add(TObstacleStructs[i]);
 			}
+		}
+		
+		uint8 r = FMath::RandRange(0, tObstacle.Num());
+		FObstacleStruct obstacle = TObstacleStructs[r];
 
-			nDifficulty -= size;
+		
+		if (CheckDisponibility(x, y, obstacle.nSize))
+		{
+			int32 Index = TObstacleStructs.IndexOfByKey(obstacle);
+
+			InsertObstacle(x,y,Index,obstacle.nSize);
+			
+			nDifficulty -= obstacle.nDifficulty;
 			nbIteration--;
 		}
 	}
