@@ -27,6 +27,8 @@ struct FObstacleStruct
 	uint8 nSize;
 	UPROPERTY(BlueprintReadWrite)
 	TSubclassOf<AActor> Obstacle;
+	UPROPERTY(BlueprintReadWrite)
+	TArray<FString> Categorie;
 };
 
 UCLASS(BlueprintType)
@@ -56,7 +58,7 @@ protected:
 	void PopulateMap(int32 nDifficulty, FString TypeObstacle);
 
 	UFUNCTION(BlueprintCallable)
-	void AddObstacle(uint8 difficulty, uint8 size, TSubclassOf<AActor> Obstacle);
+	void AddObstacle(uint8 difficulty, uint8 size, TSubclassOf<AActor> Obstacle, TArray<FString> tCategorie);
 
 	UFUNCTION(BlueprintCallable)
 	int32 GetSize(FObstacleStruct obstacleStruct)
@@ -92,4 +94,8 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite)
 	TArray<FBlocStruct> tMap;
+
+	
+	UPROPERTY(BlueprintReadWrite)
+	FString Categorie;
 };
