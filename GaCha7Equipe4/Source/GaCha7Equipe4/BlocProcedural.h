@@ -10,13 +10,17 @@ USTRUCT(BlueprintType)
 struct FBlocStruct
 {
 	GENERATED_BODY()
-	TArray<uint8> Ligne;
+	
+	UPROPERTY(BlueprintReadWrite)
+	TArray<int32> Ligne;
 };
 
 USTRUCT(BlueprintType)
 struct FObstacleStruct
 {
 	GENERATED_BODY()
+
+	
 	UPROPERTY(BlueprintReadWrite)
 	uint8 nDifficulty;
 	UPROPERTY(BlueprintReadWrite)
@@ -25,7 +29,7 @@ struct FObstacleStruct
 	TSubclassOf<AActor> Obstacle;
 };
 
-UCLASS()
+UCLASS(BlueprintType)
 class GACHA7EQUIPE4_API ABlocProcedural : public AActor
 {
 	GENERATED_BODY()
@@ -40,9 +44,7 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite)
 	int32 nTailleBloc = 10;
-	
-	UPROPERTY(BlueprintReadWrite)
-	TArray<FBlocStruct> tMap;
+
 
 	void InitMap();
 	
@@ -51,16 +53,43 @@ protected:
 	void InsertObstacle(uint8 nX, uint8 nY, int32 nIndexObstacle, uint8 nSize);
 	
 	UFUNCTION(BlueprintCallable)
-	void PopulateMap(uint8 nDifficulty, FString TypeObstacle);
+	void PopulateMap(int32 nDifficulty, FString TypeObstacle);
 
 	UFUNCTION(BlueprintCallable)
 	void AddObstacle(uint8 difficulty, uint8 size, TSubclassOf<AActor> Obstacle);
 
+	UFUNCTION(BlueprintCallable)
+	int32 GetSize(FObstacleStruct obstacleStruct)
+	{
+		return obstacleStruct.nSize;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	TSubclassOf<AActor> GetBP(FObstacleStruct obstacleStruct)
+	{
+		return obstacleStruct.Obstacle;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	TArray<int32> GetLigne(FBlocStruct BlocStruct)
+	{
+		return BlocStruct.Ligne;
+	}
+
+
+	UFUNCTION(BlueprintCallable)
+	TArray<FBlocStruct> GetTMap()
+	{
+		return tMap;
+	}
+	
 public:
 	UPROPERTY(BlueprintReadWrite)
 	TArray<FObstacleStruct> TObstacleStructs;
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	
+	UPROPERTY(BlueprintReadWrite)
+	TArray<FBlocStruct> tMap;
 };

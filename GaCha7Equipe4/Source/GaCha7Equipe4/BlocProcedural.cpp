@@ -21,40 +21,51 @@ void ABlocProcedural::BeginPlay()
 void ABlocProcedural::InitMap()
 {
 	FBlocStruct bloc;
-	bloc.Ligne.Init(0,nTailleBloc);
+	bloc.Ligne.Init(-1,nTailleBloc);
 	tMap.Init(bloc,nTailleBloc);
+
+	for (int i = 0; i < tMap.Num(); ++i)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Ligne TMAP, %d"),tMap[i].Ligne.Num());
+	}
 }
 
 bool ABlocProcedural::CheckDisponibility(uint8 x, uint8 y, uint8 size)
 {
 	bool bDisponible = true;
+	
+	//UE_LOG(LogTemp, Warning, TEXT("X %d Y %d"),x,y);
 
-	if (tMap[x].Ligne[y]==0)
+	if (x<tMap.Num() && y<tMap[x].Ligne.Num() && tMap[x].Ligne[y] == -1)
 	{
 		if (size != 1)
 		{
 			for (int i = 1; i < size; i++)
 			{
-				if (tMap[x + i].Ligne[y] != 0)
+				if ((x+i)<nTailleBloc && (y+i)<nTailleBloc)
 				{
-					bDisponible = false;
-					break;
+					if (tMap[x + i].Ligne[y] != -1 || tMap[x].Ligne[y + i] != -1 || tMap[x + i].Ligne[y + i] != -1)
+					{
+						UE_LOG(LogTemp, Warning, TEXT("Objets superposés."));
+						bDisponible = false;
+					}
 				}
-
-				if (tMap[x].Ligne[y + i] != 0)
+				else
 				{
+					UE_LOG(LogTemp, Warning, TEXT("Dépassement par taille."));
 					bDisponible = false;
-					break;
-				}
-
-				if (tMap[x + i].Ligne[y + i] != 0)
-				{
-					bDisponible = false;
-					break;
 				}
 			}
 		}
 	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Position hors tableau."));
+		bDisponible = false;
+	}
+
+	
+	UE_LOG(LogTemp, Warning, TEXT("Bool %d"),bDisponible);
 
 	return bDisponible;
 }
@@ -66,22 +77,27 @@ void ABlocProcedural::InsertObstacle(uint8 nX, uint8 nY, int32 nIndexObstacle, u
 	{
 		for (int i = 1; i < nSize; i++)
 		{
-			tMap[nX + i].Ligne[nY] = nIndexObstacle;
-			tMap[nX].Ligne[nY + i] = nIndexObstacle;
-			tMap[nX + i].Ligne[nY + i] = nIndexObstacle;
+			tMap[nX + i].Ligne[nY] = -2;
+			tMap[nX].Ligne[nY + i] = -2;
+			tMap[nX + i].Ligne[nY + i] = -2;
 		}
 	}
+	
+	UE_LOG(LogTemp, Warning, TEXT("Obstacle Inserted, %d %d"), nX, nY);
 }
 
 
-void ABlocProcedural::PopulateMap(uint8 nDifficulty, FString TypeObstacle)
+void ABlocProcedural::PopulateMap(int32 nDifficulty, FString TypeObstacle)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Difficulte, %d"), nDifficulty);
+	
 	int nbIteration = 0;
-	while (nDifficulty>0 && nbIteration<100)
+	while (nDifficulty>0 && nbIteration<1000)
 	{
+		FMath::RandInit(FDateTime::Now().GetTicks());
 		nbIteration++;
-		uint8 x = FMath::RandRange(0, nTailleBloc);
-		uint8 y = FMath::RandRange(0, nTailleBloc);
+		uint8 x = FMath::RandRange(0, nTailleBloc-1);
+		uint8 y = FMath::RandRange(0, nTailleBloc-1);
 
 		
 		TArray<FObstacleStruct> tObstacle;
@@ -93,9 +109,10 @@ void ABlocProcedural::PopulateMap(uint8 nDifficulty, FString TypeObstacle)
 			}
 		}
 		
-		uint8 r = FMath::RandRange(0, tObstacle.Num());
+		uint8 r = FMath::RandRange(0, tObstacle.Num()-1);
 		FObstacleStruct obstacle = TObstacleStructs[r];
-
+		
+		//UE_LOG(LogTemp, Warning, TEXT("Taille Obstacle, %d"), obstacle.nSize);
 		
 		if (CheckDisponibility(x, y, obstacle.nSize))
 		{
