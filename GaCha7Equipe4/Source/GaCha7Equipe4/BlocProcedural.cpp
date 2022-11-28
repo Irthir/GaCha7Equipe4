@@ -92,9 +92,9 @@ void ABlocProcedural::PopulateMap(int32 nDifficulty, FString TypeObstacle)
 	UE_LOG(LogTemp, Warning, TEXT("Difficulte, %d"), nDifficulty);
 	
 	int nbIteration = 0;
-	while (nDifficulty>0 && nbIteration<1000)
+	while (nDifficulty>0 && nbIteration<10000)
 	{
-		FMath::RandInit(FDateTime::Now().GetTicks());
+		//FMath::RandInit(FDateTime::Now().GetTicks());
 		nbIteration++;
 		uint8 x = FMath::RandRange(0, nTailleBloc-1);
 		uint8 y = FMath::RandRange(0, nTailleBloc-1);
@@ -103,43 +103,51 @@ void ABlocProcedural::PopulateMap(int32 nDifficulty, FString TypeObstacle)
 		TArray<FObstacleStruct> tObstacle;
 		for (int i = 0; i < TObstacleStructs.Num(); ++i)
 		{
-			if (true) //Faire la gestion du type d'obstacle.
+			for (int j = 0; j < TObstacleStructs[i].Categorie.Num(); ++j)
 			{
-				tObstacle.Add(TObstacleStructs[i]);
+				if (TObstacleStructs[i].Categorie[j] == Categorie)
+				{
+					tObstacle.Add(TObstacleStructs[i]);
+				}
 			}
 		}
 		
+		FObstacleStruct obstacle;
 		uint8 r = FMath::RandRange(0, tObstacle.Num()-1);
-		FObstacleStruct obstacle = TObstacleStructs[r];
-		
-		//UE_LOG(LogTemp, Warning, TEXT("Taille Obstacle, %d"), obstacle.nSize);
-		
-		if (CheckDisponibility(x, y, obstacle.nSize))
+		if (tObstacle.Num()!=0)
 		{
-			int32 Index = 0;
-			for (int i = 0; i < TObstacleStructs.Num(); ++i)
-			{
-				if (TObstacleStructs[i].Obstacle == obstacle.Obstacle)
-				{
-					Index = i;
-					break;
-				}
-			}
+			obstacle = tObstacle[r];
 
-			InsertObstacle(x,y,Index,obstacle.nSize);
+			//UE_LOG(LogTemp, Warning, TEXT("Taille Obstacle, %d"), obstacle.nSize);
+		
+			if (CheckDisponibility(x, y, obstacle.nSize))
+			{
+				int32 Index = 0;
+				for (int i = 0; i < TObstacleStructs.Num(); ++i)
+				{
+					if (TObstacleStructs[i].Obstacle == obstacle.Obstacle)
+					{
+						Index = i;
+						break;
+					}
+				}
+
+				InsertObstacle(x,y,Index,obstacle.nSize);
 			
-			nDifficulty -= obstacle.nDifficulty;
-			nbIteration--;
+				nDifficulty -= obstacle.nDifficulty;
+				nbIteration--;
+			}
 		}
 	}
 }
 
-void ABlocProcedural::AddObstacle(uint8 difficulty, uint8 size, TSubclassOf<AActor> Obstacle)
+void ABlocProcedural::AddObstacle(uint8 difficulty, uint8 size, TSubclassOf<AActor> Obstacle, TArray<FString> tCategorie)
 {
 	FObstacleStruct obstacle;
 	obstacle.nDifficulty = difficulty;
 	obstacle.nSize = size;
 	obstacle.Obstacle = Obstacle;
+	obstacle.Categorie = tCategorie;
 	TObstacleStructs.Add(obstacle);
 }
 
