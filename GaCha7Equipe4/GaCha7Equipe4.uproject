@@ -20,6 +20,10 @@
 			"TargetAllowList": [
 				"Editor"
 			]
+		},
+		{
+			"Name": "Water",
+			"Enabled": true
 		}
 	],
 	"TargetPlatforms": [
